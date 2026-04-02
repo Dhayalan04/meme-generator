@@ -64,11 +64,11 @@ img {
 /* Meme text */
 h2 {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    /*transform: translateX(-50%);*/
     color: white;
     text-shadow: 2px 2px 8px black;
     font-size: 20px;
+    cursor: move;
 }
 
 #top { top: 10px; }
