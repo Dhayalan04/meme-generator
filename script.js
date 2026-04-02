@@ -12,9 +12,10 @@ document.getElementById("imageInput").addEventListener("change", function(event)
         const reader = new FileReader();
         
         reader.onload = function(e) {
-            document.getElementById("memeImage").src = e.target.result;
+           const img = document.getElementById("memeImage");
+            img.src = e.target.result;
+            img.style.display = "block"; 
         };
-        
         reader.readAsDataURL(file);
     }
 });
