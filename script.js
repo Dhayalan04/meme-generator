@@ -18,3 +18,13 @@ document.getElementById("imageInput").addEventListener("change", function(event)
         reader.readAsDataURL(file);
     }
 });
+function downloadMeme() {
+    const meme = document.querySelector(".meme");
+
+    html2canvas(meme).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "meme.png";
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
