@@ -2,77 +2,81 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    text-align: center;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container for better layout */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 /* Heading */
 h1 {
-    margin-top: 20px;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
 }
 
-/* Input fields */
-input[type="text"] {
-    padding: 10px;
-    margin: 8px;
-    border-radius: 8px;
-    border: none;
-    width: 200px;
-    outline: none;
-}
-
-/* File input */
+/* Inputs */
+input[type="text"],
 input[type="file"] {
-    margin: 10px;
-    color: white;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
 }
 
 /* Buttons */
 button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
     border-radius: 25px;
-    background: #ff7a18;
+    border: none;
     background: linear-gradient(45deg, #ff7a18, #ffb347);
     color: white;
     font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+    font-size: 16px;
 }
 
 /* Meme container */
 .meme {
     position: relative;
-    display: inline-block;
-    margin-top: 20px;
+    width: 100%;
+    margin-top: 15px;
 }
 
-/* Image */
+/* Image full responsive */
 img {
-    width: 320px;
+    width: 100%;
     border-radius: 10px;
 }
 
-/* Meme text */
+/* Draggable text */
 h2 {
     position: absolute;
-    /*transform: translateX(-50%);*/
     color: white;
     text-shadow: 2px 2px 8px black;
-    font-size: 20px;
+    font-size: 18px;
     cursor: move;
 }
-h2:active {
-    transform: scale(1.1);
-}
 
-#top { top: 10px; }
-#bottom { bottom: 10px; }
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+}
