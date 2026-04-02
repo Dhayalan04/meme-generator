@@ -29,3 +29,28 @@ function downloadMeme() {
         link.click();
     });
 }
+function makeDraggable(element) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    element.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.offsetX;
+        offsetY = e.offsetY;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            element.style.left = (e.pageX - element.parentElement.offsetLeft - offsetX) + "px";
+            element.style.top = (e.pageY - element.parentElement.offsetTop - offsetY) + "px";
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+}
+
+// Apply to both texts
+makeDraggable(document.getElementById("top"));
+makeDraggable(document.getElementById("bottom"));
