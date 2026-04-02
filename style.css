@@ -1,0 +1,24 @@
+body {
+    text-align: center;
+    font-family: Arial;
+}
+
+.meme {
+    position: relative;
+    display: inline-block;
+}
+
+img {
+    width: 300px;
+}
+
+h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-shadow: 2px 2px black;
+}
+
+#top { top: 10px; }
+#bottom { bottom: 10px; }
