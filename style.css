@@ -30,3 +30,15 @@ h2 {
     cursor: pointer;
     margin: 10px;
 }
+button {
+    padding: 10px 15px;
+    margin: 10px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #555;
+}
