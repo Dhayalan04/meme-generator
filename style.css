@@ -70,6 +70,9 @@ h2 {
     font-size: 20px;
     cursor: move;
 }
+h2:active {
+    transform: scale(1.1);
+}
 
 #top { top: 10px; }
 #bottom { bottom: 10px; }
