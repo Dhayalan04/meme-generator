@@ -54,3 +54,16 @@ function makeDraggable(element) {
 // Apply to both texts
 makeDraggable(document.getElementById("top"));
 makeDraggable(document.getElementById("bottom"));
+function generateMeme() {
+    let topText = document.getElementById("topText").value;
+    let bottomText = document.getElementById("bottomText").value;
+
+    let top = document.getElementById("top");
+    let bottom = document.getElementById("bottom");
+
+    top.innerText = topText;
+    bottom.innerText = bottomText;
+
+    top.style.display = topText ? "block" : "none";
+    bottom.style.display = bottomText ? "block" : "none";
+}
