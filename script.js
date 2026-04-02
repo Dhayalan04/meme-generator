@@ -54,4 +54,31 @@ function makeDraggable(element) {
 // Apply to both texts
 makeDraggable(document.getElementById("top"));
 makeDraggable(document.getElementById("bottom"));
+function makeDraggable(element) {
+    let isDragging = false;
+    let offsetX, offsetY;
 
+    element.addEventListener("mousedown", startDrag);
+    element.addEventListener("touchstart", startDrag);
+
+    function startDrag(e) {
+        isDragging = true;
+        const event = e.touches ? e.touches[0] : e;
+        offsetX = event.clientX - element.offsetLeft;
+        offsetY = event.clientY - element.offsetTop;
+    }
+
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("touchmove", drag);
+
+    function drag(e) {
+        if (!isDragging) return;
+        const event = e.touches ? e.touches[0] : e;
+
+        element.style.left = (event.clientX - offsetX) + "px";
+        element.style.top = (event.clientY - offsetY) + "px";
+    }
+
+    document.addEventListener("mouseup", () => isDragging = false);
+    document.addEventListener("touchend", () => isDragging = false);
+}
