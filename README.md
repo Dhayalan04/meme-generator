@@ -1,2 +1,2 @@
 # meme-generator
-My first web project
+First web project
