@@ -22,3 +22,11 @@ h2 {
 
 #top { top: 10px; }
 #bottom { bottom: 10px; }
+.upload-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: black;
+    color: white;
+    cursor: pointer;
+    margin: 10px;
+}
