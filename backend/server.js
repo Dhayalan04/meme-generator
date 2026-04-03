@@ -6,28 +6,33 @@ import OpenAI from "openai";
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-const openai = new OpenAI({
+const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// test route
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
+// image generation route
 app.post("/generate-image", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    const response = await openai.images.generate({
+    const response = await client.images.generate({
       model: "gpt-image-1",
-      prompt,
-      size: "512x512"
+      prompt: prompt,
+      size: "512x512",
     });
 
-    res.json({ image: response.data[0].url });
+    const image = response.data[0].url;
+
+    res.json({ image });
 
   } catch (error) {
     console.error(error);
@@ -35,6 +40,8 @@ app.post("/generate-image", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
