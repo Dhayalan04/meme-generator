@@ -112,3 +112,18 @@ function makeDraggable(element) {
     document.addEventListener("mouseup", () => isDragging = false);
     document.addEventListener("touchend", () => isDragging = false);
 }
+async function generateAIImage() {
+  const prompt = document.getElementById("aiPrompt").value;
+
+  const res = await fetch("https://your-backend-url.onrender.com/generate-image", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt }),
+  });
+
+  const data = await res.json();
+
+  document.getElementById("aiImage").src = data.image;
+}
