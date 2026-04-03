@@ -30,7 +30,7 @@ app.post("/generate-image", async (req, res) => {
       size: "512x512",
     });
 
-    const image = response.data[0].url;
+    const image = `data:image/png;base64,${response.data[0].b64_json}`;
 
     res.json({ image });
 
