@@ -115,7 +115,7 @@ function makeDraggable(element) {
 async function generateAIImage() {
   const prompt = document.getElementById("aiPrompt").value;
 
-  const res = await fetch("https://meme-backend-n1g8.onrender.com/generate-image", {
+  const res = await fetch("https://meme-backend-n1g8.onrender.com/generate-image"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
