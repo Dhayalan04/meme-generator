@@ -127,10 +127,12 @@ async function generateAIImage() {
 
   document.getElementById("aiImage").src = data.image;
 }
-console.log("Button clicked");
+
 async function generateAIImage() {
   try {
     const prompt = document.getElementById("aiPrompt").value;
+
+    console.log("Button clicked");
 
     const res = await fetch("https://meme-backend-n1g8.onrender.com/generate-image", {
       method: "POST",
