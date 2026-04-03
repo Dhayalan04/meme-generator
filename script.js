@@ -127,3 +127,4 @@ async function generateAIImage() {
 
   document.getElementById("aiImage").src = data.image;
 }
+console.log("Button clicked");
