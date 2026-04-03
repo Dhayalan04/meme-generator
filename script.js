@@ -120,7 +120,7 @@ async function generateAIImage() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ prompt: prompt }),
   });
 
   const data = await res.json();
@@ -128,3 +128,26 @@ async function generateAIImage() {
   document.getElementById("aiImage").src = data.image;
 }
 console.log("Button clicked");
+async function generateAIImage() {
+  try {
+    const prompt = document.getElementById("aiPrompt").value;
+
+    const res = await fetch("https://meme-backend-n1g8.onrender.com/generate-image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt: prompt }),
+    });
+
+    const data = await res.json();
+
+    console.log(data); // debug
+
+    document.getElementById("aiImage").src = data.image;
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Failed to generate image");
+  }
+}
