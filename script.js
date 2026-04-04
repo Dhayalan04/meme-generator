@@ -15,33 +15,38 @@ const generateBtn = document.getElementById("generate-btn");
 const downloadBtn = document.getElementById("download-btn");
 const randomBtn = document.getElementById("random-btn");
 const toggleTheme = document.getElementById("toggleTheme");
+const templatePreview = document.getElementById("template-preview");
 
 let currentImage = new Image();
 let topText = "TOP TEXT";
 let bottomText = "BOTTOM TEXT";
+let memeTemplates = [];
 
-// Load meme templates from API
+// Fetch meme templates
 fetch("https://api.imgflip.com/get_memes")
   .then(res => res.json())
   .then(data => {
-    data.data.memes.forEach(meme => {
+    memeTemplates = data.data.memes;
+    memeTemplates.forEach((meme, index) => {
       const option = document.createElement("option");
       option.value = meme.url;
       option.textContent = meme.name;
       templateSelect.appendChild(option);
+
+      const thumb = document.createElement("img");
+      thumb.src = meme.url;
+      thumb.title = meme.name;
+      thumb.addEventListener("click", () => loadImage(meme.url));
+      templatePreview.appendChild(thumb);
     });
   });
 
-// Handle theme toggle
-toggleTheme.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
+// Theme toggle
+toggleTheme.addEventListener("click", () => document.body.classList.toggle("dark"));
 
 // Handle template selection
 templateSelect.addEventListener("change", () => {
-  if (templateSelect.value) {
-    loadImage(templateSelect.value);
-  }
+  if (templateSelect.value) loadImage(templateSelect.value);
 });
 
 // Handle image upload
@@ -49,13 +54,11 @@ imageUpload.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(event) {
-    loadImage(event.target.result);
-  };
+  reader.onload = (event) => loadImage(event.target.result);
   reader.readAsDataURL(file);
 });
 
-// Update text inputs
+// Text updates
 inputTop.addEventListener("input", () => {
   topText = inputTop.value;
   topTextDiv.textContent = topText;
@@ -68,10 +71,8 @@ fontSizeInput.addEventListener("input", drawMeme);
 fontColorInput.addEventListener("input", drawMeme);
 fontStyleInput.addEventListener("input", drawMeme);
 
-// Generate & draw meme
+// Buttons
 generateBtn.addEventListener("click", drawMeme);
-
-// Download meme
 downloadBtn.addEventListener("click", () => {
   html2canvas(document.getElementById("meme-container")).then(canvas => {
     const link = document.createElement("a");
@@ -81,21 +82,18 @@ downloadBtn.addEventListener("click", () => {
   });
 });
 
-// Random meme
 randomBtn.addEventListener("click", () => {
-  const options = templateSelect.options;
-  const randomIndex = Math.floor(Math.random() * (options.length - 1)) + 1;
-  templateSelect.selectedIndex = randomIndex;
-  loadImage(options[randomIndex].value);
+  const randomMeme = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
+  templateSelect.value = randomMeme.url;
+  loadImage(randomMeme.url);
 });
 
-// Drag & drop text
+// Drag & drop
 function dragElement(el) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   el.onmousedown = dragMouseDown;
 
   function dragMouseDown(e) {
-    e = e || window.event;
     e.preventDefault();
     pos3 = e.clientX;
     pos4 = e.clientY;
@@ -104,7 +102,6 @@ function dragElement(el) {
   }
 
   function elementDrag(e) {
-    e = e || window.event;
     e.preventDefault();
     pos1 = pos3 - e.clientX;
     pos2 = pos4 - e.clientY;
