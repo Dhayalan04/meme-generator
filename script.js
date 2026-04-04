@@ -1,124 +1,164 @@
-document.addEventListener("DOMContentLoaded", () => {
+const canvas = document.getElementById("meme-canvas");
+const ctx = canvas.getContext("2d");
+const topTextDiv = document.getElementById("top-text");
+const bottomTextDiv = document.getElementById("bottom-text");
 
-  console.log("JS Loaded ✅");
+const inputTop = document.getElementById("input-top-text");
+const inputBottom = document.getElementById("input-bottom-text");
+const fontSizeInput = document.getElementById("font-size");
+const fontColorInput = document.getElementById("font-color");
+const fontStyleInput = document.getElementById("font-style");
 
-  // -------------------- GLOBAL --------------------
-  let selectedTemplate = null;
+const imageUpload = document.getElementById("image-upload");
+const templateSelect = document.getElementById("template-select");
+const generateBtn = document.getElementById("generate-btn");
+const downloadBtn = document.getElementById("download-btn");
+const randomBtn = document.getElementById("random-btn");
+const toggleTheme = document.getElementById("toggleTheme");
 
-  // -------------------- MEME TEXT --------------------
-  function generateMeme() {
-    let topText = document.getElementById("topText").value;
-    let bottomText = document.getElementById("bottomText").value;
+let currentImage = new Image();
+let topText = "TOP TEXT";
+let bottomText = "BOTTOM TEXT";
 
-    let top = document.getElementById("top");
-    let bottom = document.getElementById("bottom");
-
-    top.innerText = topText;
-    bottom.innerText = bottomText;
-
-    top.style.display = topText ? "block" : "none";
-    bottom.style.display = bottomText ? "block" : "none";
-
-    top.style.top = "10px";
-    top.style.left = "50%";
-    top.style.transform = "translateX(-50%)";
-
-    bottom.style.bottom = "10px";
-    bottom.style.left = "50%";
-    bottom.style.transform = "translateX(-50%)";
-  }
-
-  window.generateMeme = generateMeme;
-
-  // -------------------- LOAD TEMPLATES --------------------
-  async function loadTemplates() {
-    console.log("Loading templates...");
-
-    try {
-      const res = await fetch("https://api.imgflip.com/get_memes");
-      const data = await res.json();
-
-      const memes = data.data.memes;
-      const container = document.getElementById("templateContainer");
-
-      container.innerHTML = "";
-
-      memes.slice(0, 12).forEach(meme => {
-        const img = document.createElement("img");
-        img.src = meme.url;
-
-        img.onclick = () => {
-          document.getElementById("memeImage").src = meme.url;
-          document.getElementById("memeImage").style.display = "block";
-        };
-
-        container.appendChild(img);
-      });
-
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  window.loadTemplates = loadTemplates;
-
-  // -------------------- IMAGE UPLOAD --------------------
-  document.getElementById("imageInput").addEventListener("change", function (event) {
-    const file = event.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        const img = document.getElementById("memeImage");
-        img.src = e.target.result;
-        img.style.display = "block";
-      };
-
-      reader.readAsDataURL(file);
-    }
+// Load meme templates from API
+fetch("https://api.imgflip.com/get_memes")
+  .then(res => res.json())
+  .then(data => {
+    data.data.memes.forEach(meme => {
+      const option = document.createElement("option");
+      option.value = meme.url;
+      option.textContent = meme.name;
+      templateSelect.appendChild(option);
+    });
   });
 
-  // -------------------- DOWNLOAD --------------------
-  function downloadMeme() {
-    const meme = document.querySelector(".meme");
-
-    html2canvas(meme).then((canvas) => {
-      const link = document.createElement("a");
-      link.download = "meme.png";
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-  }
-
-  window.downloadMeme = downloadMeme;
-
-  // -------------------- DRAG --------------------
-  function makeDraggable(element) {
-    if (!element) return;
-
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    element.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      offsetX = e.clientX - element.offsetLeft;
-      offsetY = e.clientY - element.offsetTop;
-    });
-
-    document.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-
-      element.style.left = e.clientX - offsetX + "px";
-      element.style.top = e.clientY - offsetY + "px";
-    });
-
-    document.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
-  }
-
-  makeDraggable(document.getElementById("top"));
-  makeDraggable(document.getElementById("bottom"));
-
+// Handle theme toggle
+toggleTheme.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
 });
+
+// Handle template selection
+templateSelect.addEventListener("change", () => {
+  if (templateSelect.value) {
+    loadImage(templateSelect.value);
+  }
+});
+
+// Handle image upload
+imageUpload.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    loadImage(event.target.result);
+  };
+  reader.readAsDataURL(file);
+});
+
+// Update text inputs
+inputTop.addEventListener("input", () => {
+  topText = inputTop.value;
+  topTextDiv.textContent = topText;
+});
+inputBottom.addEventListener("input", () => {
+  bottomText = inputBottom.value;
+  bottomTextDiv.textContent = bottomText;
+});
+fontSizeInput.addEventListener("input", drawMeme);
+fontColorInput.addEventListener("input", drawMeme);
+fontStyleInput.addEventListener("input", drawMeme);
+
+// Generate & draw meme
+generateBtn.addEventListener("click", drawMeme);
+
+// Download meme
+downloadBtn.addEventListener("click", () => {
+  html2canvas(document.getElementById("meme-container")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "meme.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+});
+
+// Random meme
+randomBtn.addEventListener("click", () => {
+  const options = templateSelect.options;
+  const randomIndex = Math.floor(Math.random() * (options.length - 1)) + 1;
+  templateSelect.selectedIndex = randomIndex;
+  loadImage(options[randomIndex].value);
+});
+
+// Drag & drop text
+function dragElement(el) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  el.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    el.style.top = (el.offsetTop - pos2) + "px";
+    el.style.left = (el.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+dragElement(topTextDiv);
+dragElement(bottomTextDiv);
+
+// Load image
+function loadImage(src) {
+  currentImage.src = src;
+  currentImage.crossOrigin = "anonymous";
+  currentImage.onload = () => {
+    canvas.width = currentImage.width;
+    canvas.height = currentImage.height;
+    topTextDiv.style.top = "10px";
+    bottomTextDiv.style.top = canvas.height - 60 + "px";
+    topTextDiv.style.left = "0px";
+    bottomTextDiv.style.left = "0px";
+    drawMeme();
+  };
+}
+
+// Draw meme
+function drawMeme() {
+  if (!currentImage.src) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+
+  const fontSize = parseInt(fontSizeInput.value, 10);
+  const fontColor = fontColorInput.value;
+  const fontStyle = fontStyleInput.value;
+
+  ctx.font = `${fontSize}px ${fontStyle}`;
+  ctx.fillStyle = fontColor;
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2;
+  ctx.textAlign = "center";
+
+  // Top text
+  ctx.fillText(topTextDiv.textContent, canvas.width / 2, parseInt(topTextDiv.style.top || 50) + fontSize);
+  ctx.strokeText(topTextDiv.textContent, canvas.width / 2, parseInt(topTextDiv.style.top || 50) + fontSize);
+
+  // Bottom text
+  ctx.fillText(bottomTextDiv.textContent, canvas.width / 2, parseInt(bottomTextDiv.style.top || (canvas.height - 50)) + fontSize);
+  ctx.strokeText(bottomTextDiv.textContent, canvas.width / 2, parseInt(bottomTextDiv.style.top || (canvas.height - 50)) + fontSize);
+}
