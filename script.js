@@ -76,20 +76,37 @@ async function generateAIImage() {
   try {
     const prompt = document.getElementById("aiPrompt").value;
 
+    if (!prompt || prompt.trim() === "") {
+      alert("Please enter a prompt!");
+      return;
+    }
+
     const res = await fetch("https://meme-generator-fp80.onrender.com/generate-image", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: prompt }),
+      body: JSON.stringify({ prompt }),
     });
 
     const data = await res.json();
 
-    document.getElementById("aiImage").src = data.image;
+    // Check for backend error
+    if (!res.ok) {
+      console.error("Backend error:", data);
+      alert(data.error || "Failed to generate image");
+      return;
+    }
+
+    // Set image
+    if (data.image) {
+      document.getElementById("aiImage").src = data.image;
+    } else {
+      alert("No image returned");
+    }
 
   } catch (error) {
-    console.error(error);
-    alert("Failed to generate image");
+    console.error("Frontend error:", error);
+    alert("Something went wrong!");
   }
 }
