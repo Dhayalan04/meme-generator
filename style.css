@@ -1,149 +1,115 @@
-/* ---------- GLOBAL ---------- */
+* {
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #2c2c54);
-    color: #fff;
-    display: flex;
-    justify-content: center;
+  margin: 0;
+  padding: 0;
+  background: #f0f0f0;
+  color: #333;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* ---------- CONTAINER ---------- */
-.container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #4a90e2;
+  color: #fff;
+  padding: 1rem 2rem;
 }
 
-/* ---------- HEADINGS ---------- */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
+header button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-h2 {
-    margin-bottom: 10px;
+main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 2rem;
 }
 
-/* ---------- INPUT SECTION ---------- */
-.input-section input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    background: #ffffff10;
-    color: white;
-    backdrop-filter: blur(10px);
+.preview-section {
+  flex: 1 1 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ---------- BUTTONS ---------- */
-.btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+#meme-container {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+}
+
+canvas {
+  width: 100%;
+  border: 2px solid #333;
+}
+
+.draggable {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 2px 2px 4px #000;
+  cursor: move;
+  user-select: none;
+}
+
+.controls-section {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls-section label {
+  display: flex;
+  flex-direction: column;
+}
+
+.controls-section input, .controls-section select, .controls-section button {
+  padding: 0.5rem;
+  margin-top: 0.3rem;
 }
 
 button {
-    padding: 12px 20px;
-    border-radius: 25px;
-    border: none;
-    background: linear-gradient(45deg, #ff7a18, #ffb347);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+  background: #357abd;
 }
 
-/* ---------- MEME DISPLAY ---------- */
-.meme {
-    position: relative;
-    margin-top: 20px;
-    border-radius: 15px;
-    overflow: hidden;
-    background: #00000030;
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #ddd;
 }
 
-#memeImage {
-    width: 100%;
-    display: block;
+body.dark {
+  background: #222;
+  color: #fff;
 }
 
-/* ---------- DRAG TEXT ---------- */
-h2#top,
-h2#bottom {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    text-shadow: 2px 2px 8px black;
-    font-size: 20px;
-    cursor: move;
-    user-select: none;
+body.dark header {
+  background: #111;
 }
 
-/* ---------- SECTION BLOCK ---------- */
-.section {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 15px;
-    background: #ffffff10;
-    backdrop-filter: blur(10px);
-}
-
-/* ---------- TEMPLATE GRID ---------- */
-.template-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.template-grid img {
-    width: 100%;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.template-grid img:hover {
-    transform: scale(1.08);
-}
-
-/* ---------- AI IMAGE ---------- */
-#aiImage {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 10px;
-}
-
-/* ---------- LOADING ---------- */
-#loading {
-    display: none;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* ---------- MOBILE ---------- */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    h2#top,
-    h2#bottom {
-        font-size: 16px;
-    }
-
-    button {
-        width: 100%;
-    }
+body.dark footer {
+  background: #111;
 }
