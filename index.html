@@ -3,7 +3,11 @@
 <head>
     <title>Meme Generator</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -18,12 +22,14 @@
     <input type="text" id="bottomText" placeholder="Bottom Text">
     <input type="file" id="imageInput" accept="image/*">
 
-    <button onclick="generateMeme()">Generate Meme</button>
-    <button onclick="downloadMeme()">Download Meme</button>
+    <div class="btn-group">
+        <button onclick="generateMeme()">Generate Meme</button>
+        <button onclick="downloadMeme()">Download Meme</button>
+    </div>
 
     <!-- Meme Display -->
     <div class="meme">
-        <img id="memeImage" style="display:none;">
+        <img id="memeImage" alt="Meme Image" style="display:none;">
         <h2 id="top"></h2>
         <h2 id="bottom"></h2>
     </div>
@@ -31,18 +37,21 @@
     <hr>
 
     <!-- AI Image Generator -->
-    <p>Generate AI Image</p>
+    <h3>Generate AI Image</h3>
 
     <input type="text" id="aiPrompt" placeholder="Enter image prompt..." />
+    
     <button onclick="generateAIImage()">Generate AI Image</button>
 
-    <br><br>
+    <p id="loading" style="display:none;">⏳ Generating image...</p>
 
-    <img id="aiImage" width="300" />
+    <br>
+
+    <img id="aiImage" alt="AI Generated Image" width="300" style="display:none;" />
 
 </div>
 
-<!-- Scripts MUST be here -->
+<!-- Scripts -->
 <script src="script.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
