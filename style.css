@@ -1,84 +1,149 @@
+/* ---------- GLOBAL ---------- */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+    color: #fff;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
-/* Container for better layout */
+/* ---------- CONTAINER ---------- */
 .container {
     width: 100%;
-    max-width: 400px;
-    padding: 15px;
-    box-sizing: border-box;
+    max-width: 500px;
+    padding: 20px;
 }
 
-/* Heading */
+/* ---------- HEADINGS ---------- */
 h1 {
-    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
     margin-bottom: 10px;
 }
 
-/* Inputs */
-input[type="text"],
-input[type="file"] {
+/* ---------- INPUT SECTION ---------- */
+.input-section input {
     width: 100%;
     padding: 12px;
-    margin: 8px 0;
+    margin-bottom: 10px;
     border-radius: 10px;
     border: none;
     outline: none;
-    box-sizing: border-box;
+    background: #ffffff10;
+    color: white;
+    backdrop-filter: blur(10px);
 }
 
-/* Buttons */
+/* ---------- BUTTONS ---------- */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 button {
-    width: auto;
-    min-width: 200px;
-    padding: 12px;
-    margin: 8px 0;
+    padding: 12px 20px;
     border-radius: 25px;
     border: none;
     background: linear-gradient(45deg, #ff7a18, #ffb347);
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* Meme container */
+button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* ---------- MEME DISPLAY ---------- */
 .meme {
     position: relative;
-    width: 100%;
-    margin-top: 15px;
+    margin-top: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #00000030;
 }
 
-/* Image full responsive */
-img {
+#memeImage {
     width: 100%;
-    border-radius: 10px;
+    display: block;
 }
 
-/* Draggable text */
-h2 {
+/* ---------- DRAG TEXT ---------- */
+h2#top,
+h2#bottom {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     color: white;
     text-shadow: 2px 2px 8px black;
-    font-size: 18px;
+    font-size: 20px;
     cursor: move;
+    user-select: none;
 }
-/* Mobile adjustments */
+
+/* ---------- SECTION BLOCK ---------- */
+.section {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 15px;
+    background: #ffffff10;
+    backdrop-filter: blur(10px);
+}
+
+/* ---------- TEMPLATE GRID ---------- */
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.template-grid img {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.template-grid img:hover {
+    transform: scale(1.08);
+}
+
+/* ---------- AI IMAGE ---------- */
+#aiImage {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* ---------- LOADING ---------- */
+#loading {
+    display: none;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* ---------- MOBILE ---------- */
 @media (max-width: 600px) {
     h1 {
         font-size: 1.5rem;
     }
 
-    h2 {
+    h2#top,
+    h2#bottom {
         font-size: 16px;
+    }
+
+    button {
+        width: 100%;
     }
 }
