@@ -14,7 +14,8 @@
   </header>
 
   <main>
-    <section class="preview-section">
+    <section class="preview-section card">
+      <h2>Live Preview</h2>
       <div id="meme-container">
         <canvas id="meme-canvas"></canvas>
         <div id="top-text" class="draggable">TOP TEXT</div>
@@ -22,7 +23,7 @@
       </div>
     </section>
 
-    <section class="controls-section">
+    <section class="controls-section card">
       <h2>Controls</h2>
 
       <label>Upload Image:
@@ -35,6 +36,8 @@
         </select>
       </label>
 
+      <div id="template-preview"></div>
+
       <label>Top Text:
         <input type="text" id="input-top-text" placeholder="Top Text">
       </label>
@@ -43,26 +46,30 @@
         <input type="text" id="input-bottom-text" placeholder="Bottom Text">
       </label>
 
-      <label>Font Size:
-        <input type="number" id="font-size" value="40">
-      </label>
+      <div class="font-controls">
+        <label>Font Size:
+          <input type="number" id="font-size" value="40">
+        </label>
 
-      <label>Font Color:
-        <input type="color" id="font-color" value="#ffffff">
-      </label>
+        <label>Font Color:
+          <input type="color" id="font-color" value="#ffffff">
+        </label>
 
-      <label>Font Style:
-        <select id="font-style">
-          <option value="Impact">Impact</option>
-          <option value="Arial">Arial</option>
-          <option value="Comic Sans MS">Comic Sans MS</option>
-          <option value="Tahoma">Tahoma</option>
-        </select>
-      </label>
+        <label>Font Style:
+          <select id="font-style">
+            <option value="Impact">Impact</option>
+            <option value="Arial">Arial</option>
+            <option value="Comic Sans MS">Comic Sans MS</option>
+            <option value="Tahoma">Tahoma</option>
+          </select>
+        </label>
+      </div>
 
-      <button id="generate-btn">Generate Meme</button>
-      <button id="download-btn">Download Meme</button>
-      <button id="random-btn">Random Meme Template</button>
+      <div class="buttons">
+        <button id="generate-btn">Generate Meme</button>
+        <button id="download-btn">Download Meme</button>
+        <button id="random-btn">Random Meme Template</button>
+      </div>
     </section>
   </main>
 
