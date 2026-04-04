@@ -1,59 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Meme Generator</title>
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-    <!-- Mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pro Meme Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
-
 <body>
-
-<div class="container">
-    
+  <header>
     <h1>Meme Generator</h1>
+    <button id="toggleTheme">🌙 Dark Mode</button>
+  </header>
 
-    <!-- Meme Inputs -->
-    <input type="text" id="topText" placeholder="Top Text">
-    <input type="text" id="bottomText" placeholder="Bottom Text">
-    <input type="file" id="imageInput" accept="image/*">
+  <main>
+    <section class="preview-section">
+      <div id="meme-container">
+        <canvas id="meme-canvas"></canvas>
+        <div id="top-text" class="draggable">TOP TEXT</div>
+        <div id="bottom-text" class="draggable">BOTTOM TEXT</div>
+      </div>
+    </section>
 
-    <div class="btn-group">
-        <button onclick="generateMeme()">Generate Meme</button>
-        <button onclick="downloadMeme()">Download Meme</button>
-    </div>
+    <section class="controls-section">
+      <h2>Controls</h2>
 
-    <!-- Meme Display -->
-    <div class="meme">
-        <img id="memeImage" alt="Meme Image" style="display:none;">
-        <h2 id="top"></h2>
-        <h2 id="bottom"></h2>
-    </div>
+      <label>Upload Image:
+        <input type="file" id="image-upload" accept="image/*">
+      </label>
 
-    <hr>
+      <label>Select Template:
+        <select id="template-select">
+          <option value="">-- Choose a Template --</option>
+        </select>
+      </label>
 
-    <!-- AI Image Generator -->
-    <h3>Generate AI Image</h3>
+      <label>Top Text:
+        <input type="text" id="input-top-text" placeholder="Top Text">
+      </label>
 
-    <input type="text" id="aiPrompt" placeholder="Enter image prompt..." />
-    
-    <button onclick="generateAIImage()">Generate AI Image</button>
+      <label>Bottom Text:
+        <input type="text" id="input-bottom-text" placeholder="Bottom Text">
+      </label>
 
-    <p id="loading" style="display:none;">⏳ Generating image...</p>
+      <label>Font Size:
+        <input type="number" id="font-size" value="40">
+      </label>
 
-    <br>
+      <label>Font Color:
+        <input type="color" id="font-color" value="#ffffff">
+      </label>
 
-    <img id="aiImage" alt="AI Generated Image" width="300" style="display:none;" />
+      <label>Font Style:
+        <select id="font-style">
+          <option value="Impact">Impact</option>
+          <option value="Arial">Arial</option>
+          <option value="Comic Sans MS">Comic Sans MS</option>
+          <option value="Tahoma">Tahoma</option>
+        </select>
+      </label>
 
-</div>
+      <button id="generate-btn">Generate Meme</button>
+      <button id="download-btn">Download Meme</button>
+      <button id="random-btn">Random Meme Template</button>
+    </section>
+  </main>
 
-<!-- Scripts -->
-<script src="./script.js?v=2" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <footer>
+    <p>Created by <a href="https://github.com/Dhayalan04">Dhayalan B</a></p>
+  </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>
