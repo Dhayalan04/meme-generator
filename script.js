@@ -14,20 +14,22 @@ const templateSelect = document.getElementById("template-select");
 const generateBtn = document.getElementById("generate-btn");
 const downloadBtn = document.getElementById("download-btn");
 const randomBtn = document.getElementById("random-btn");
+const shareBtn = document.getElementById("share-btn");
 const toggleTheme = document.getElementById("toggleTheme");
 const templatePreview = document.getElementById("template-preview");
+const historyContainer = document.getElementById("history-container");
 
 let currentImage = new Image();
 let topText = "TOP TEXT";
 let bottomText = "BOTTOM TEXT";
 let memeTemplates = [];
 
-// Fetch meme templates
+// Load meme templates
 fetch("https://api.imgflip.com/get_memes")
   .then(res => res.json())
   .then(data => {
     memeTemplates = data.data.memes;
-    memeTemplates.forEach((meme, index) => {
+    memeTemplates.forEach(meme => {
       const option = document.createElement("option");
       option.value = meme.url;
       option.textContent = meme.name;
@@ -44,12 +46,12 @@ fetch("https://api.imgflip.com/get_memes")
 // Theme toggle
 toggleTheme.addEventListener("click", () => document.body.classList.toggle("dark"));
 
-// Handle template selection
+// Template selection
 templateSelect.addEventListener("change", () => {
   if (templateSelect.value) loadImage(templateSelect.value);
 });
 
-// Handle image upload
+// Image upload
 imageUpload.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -58,7 +60,7 @@ imageUpload.addEventListener("change", (e) => {
   reader.readAsDataURL(file);
 });
 
-// Text updates
+// Text inputs
 inputTop.addEventListener("input", () => {
   topText = inputTop.value;
   topTextDiv.textContent = topText;
@@ -72,7 +74,11 @@ fontColorInput.addEventListener("input", drawMeme);
 fontStyleInput.addEventListener("input", drawMeme);
 
 // Buttons
-generateBtn.addEventListener("click", drawMeme);
+generateBtn.addEventListener("click", () => {
+  drawMeme();
+  saveMemeToHistory();
+});
+
 downloadBtn.addEventListener("click", () => {
   html2canvas(document.getElementById("meme-container")).then(canvas => {
     const link = document.createElement("a");
@@ -86,6 +92,16 @@ randomBtn.addEventListener("click", () => {
   const randomMeme = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
   templateSelect.value = randomMeme.url;
   loadImage(randomMeme.url);
+});
+
+// Share meme
+shareBtn.addEventListener("click", () => {
+  html2canvas(document.getElementById("meme-container")).then(canvas => {
+    const dataURL = canvas.toDataURL();
+    const encodedURL = encodeURIComponent(dataURL);
+    const twitterURL = `https://twitter.com/intent/tweet?text=Check out my meme!&url=${encodedURL}`;
+    window.open(twitterURL, "_blank");
+  });
 });
 
 // Drag & drop
@@ -151,11 +167,41 @@ function drawMeme() {
   ctx.lineWidth = 2;
   ctx.textAlign = "center";
 
-  // Top text
   ctx.fillText(topTextDiv.textContent, canvas.width / 2, parseInt(topTextDiv.style.top || 50) + fontSize);
   ctx.strokeText(topTextDiv.textContent, canvas.width / 2, parseInt(topTextDiv.style.top || 50) + fontSize);
 
-  // Bottom text
   ctx.fillText(bottomTextDiv.textContent, canvas.width / 2, parseInt(bottomTextDiv.style.top || (canvas.height - 50)) + fontSize);
   ctx.strokeText(bottomTextDiv.textContent, canvas.width / 2, parseInt(bottomTextDiv.style.top || (canvas.height - 50)) + fontSize);
+}
+
+// Meme history
+let memeHistory = JSON.parse(localStorage.getItem("memeHistory") || "[]");
+renderHistory();
+
+function saveMemeToHistory() {
+  html2canvas(document.getElementById("meme-container")).then(canvas => {
+    const dataURL = canvas.toDataURL();
+    memeHistory.unshift(dataURL);
+    localStorage.setItem("memeHistory", JSON.stringify(memeHistory));
+    renderHistory();
+  });
+}
+
+function renderHistory() {
+  historyContainer.innerHTML = "";
+  memeHistory.forEach((src) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("history-thumbnail");
+    img.title = "Click to download";
+    img.addEventListener("click", () => downloadHistoryMeme(src));
+    historyContainer.appendChild(img);
+  });
+}
+
+function downloadHistoryMeme(src) {
+  const link = document.createElement("a");
+  link.href = src;
+  link.download = "meme.png";
+  link.click();
 }
