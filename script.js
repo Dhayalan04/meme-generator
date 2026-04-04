@@ -75,11 +75,16 @@ makeDraggable(document.getElementById("bottom"));
 async function generateAIImage() {
   try {
     const prompt = document.getElementById("aiPrompt").value;
+    const loading = document.getElementById("loading");
+    const img = document.getElementById("aiImage");
 
-    if (!prompt || prompt.trim() === "") {
+    if (!prompt.trim()) {
       alert("Please enter a prompt!");
       return;
     }
+
+    loading.style.display = "block";
+    img.style.display = "none";
 
     const res = await fetch("https://meme-generator-fp80.onrender.com/generate-image", {
       method: "POST",
@@ -91,22 +96,19 @@ async function generateAIImage() {
 
     const data = await res.json();
 
-    // Check for backend error
     if (!res.ok) {
-      console.error("Backend error:", data);
       alert(data.error || "Failed to generate image");
+      loading.style.display = "none";
       return;
     }
 
-    // Set image
-    if (data.image) {
-      document.getElementById("aiImage").src = data.image;
-    } else {
-      alert("No image returned");
-    }
+    img.src = data.image;
+    img.style.display = "block";
+
+    loading.style.display = "none";
 
   } catch (error) {
-    console.error("Frontend error:", error);
+    console.error(error);
     alert("Something went wrong!");
   }
 }
