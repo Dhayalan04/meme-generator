@@ -11,6 +11,7 @@ function generateMeme() {
   top.style.display = topText ? "block" : "none";
   bottom.style.display = bottomText ? "block" : "none";
 
+  // Positioning
   top.style.top = "10px";
   top.style.left = "50%";
   top.style.transform = "translateX(-50%)";
@@ -19,6 +20,8 @@ function generateMeme() {
   bottom.style.left = "50%";
   bottom.style.transform = "translateX(-50%)";
 }
+
+// -------------------- IMAGE UPLOAD --------------------
 
 document.getElementById("imageInput").addEventListener("change", function (event) {
   const file = event.target.files[0];
@@ -36,6 +39,8 @@ document.getElementById("imageInput").addEventListener("change", function (event
   }
 });
 
+// -------------------- DOWNLOAD MEME --------------------
+
 function downloadMeme() {
   const meme = document.querySelector(".meme");
 
@@ -46,6 +51,8 @@ function downloadMeme() {
     link.click();
   });
 }
+
+// -------------------- DRAG TEXT --------------------
 
 function makeDraggable(element) {
   let isDragging = false;
@@ -72,43 +79,35 @@ function makeDraggable(element) {
 makeDraggable(document.getElementById("top"));
 makeDraggable(document.getElementById("bottom"));
 
-async function generateAIImage() {
-  try {
-    const prompt = document.getElementById("aiPrompt").value;
-    const loading = document.getElementById("loading");
-    const img = document.getElementById("aiImage");
+// -------------------- FREE AI IMAGE GENERATOR --------------------
 
-    if (!prompt.trim()) {
-      alert("Please enter a prompt!");
-      return;
-    }
+function generateAIImage() {
+  const prompt = document.getElementById("aiPrompt").value;
+  const img = document.getElementById("aiImage");
+  const loading = document.getElementById("loading");
 
-    loading.style.display = "block";
-    img.style.display = "none";
-
-    const res = await fetch("https://meme-generator-fp80.onrender.com/generate-image", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Failed to generate image");
-      loading.style.display = "none";
-      return;
-    }
-
-    img.src = data.image;
-    img.style.display = "block";
-
-    loading.style.display = "none";
-
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong!");
+  if (!prompt.trim()) {
+    alert("Please enter a prompt!");
+    return;
   }
+
+  // Show loading
+  if (loading) loading.style.display = "block";
+  img.style.display = "none";
+
+  // FREE AI IMAGE (no backend, no API key)
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+
+  // Load image
+  img.onload = () => {
+    if (loading) loading.style.display = "none";
+    img.style.display = "block";
+  };
+
+  img.onerror = () => {
+    if (loading) loading.style.display = "none";
+    alert("Failed to load AI image");
+  };
+
+  img.src = url;
 }
