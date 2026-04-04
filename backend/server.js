@@ -11,11 +11,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Check API Key
-if (!process.env.OPENAI_API_KEY) {
-  console.error("❌ ERROR: OPENAI_API_KEY is missing in .env file");
-  process.exit(1); // stop server if key missing
-}
+// Debug log (IMPORTANT for Render)
+console.log("🔑 API KEY:", process.env.OPENAI_API_KEY ? "Loaded ✅" : "Missing ❌");
 
 // OpenAI client
 const client = new OpenAI({
@@ -44,12 +41,12 @@ app.post("/generate-image", async (req, res) => {
     // Call OpenAI API
     const response = await client.images.generate({
       model: "gpt-image-1",
-      prompt: prompt,
+      prompt,
       size: "512x512",
     });
 
-    // Extract image
-    const imageBase64 = response.data[0].b64_json;
+    // Extract image safely
+    const imageBase64 = response?.data?.[0]?.b64_json;
 
     if (!imageBase64) {
       throw new Error("No image returned from API");
@@ -62,7 +59,7 @@ app.post("/generate-image", async (req, res) => {
     res.json({ image });
 
   } catch (error) {
-    console.error("❌ FULL ERROR:", error);
+    console.error("❌ ERROR DETAILS:", error.message);
 
     res.status(500).json({
       error: error.message || "Image generation failed",
