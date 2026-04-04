@@ -150,6 +150,32 @@ button:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+/* Meme History */
+.history-section {
+  flex: 1 1 700px;
+}
+
+#history-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.history-thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid #ccc;
+}
+
+.history-thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
 /* Footer */
 footer {
   text-align: center;
