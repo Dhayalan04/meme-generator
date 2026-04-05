@@ -1,3 +1,7 @@
+// ----------------------
+// Meme Generator Script
+// ----------------------
+
 const canvas = document.getElementById("meme-canvas");
 const ctx = canvas.getContext("2d");
 
@@ -17,25 +21,13 @@ const downloadBtn = document.getElementById("download-btn");
 const randomBtn = document.getElementById("random-btn");
 const toggleTheme = document.getElementById("toggleTheme");
 
-// Current meme image
+// Meme data
 let currentImage = new Image();
 let memeTemplates = [];
 
-// ----------------------
 // Text objects
-// ----------------------
-let topText = {
-  text: "TOP TEXT",
-  x: 0,
-  y: 0,
-  isDragging: false
-};
-let bottomText = {
-  text: "BOTTOM TEXT",
-  x: 0,
-  y: 0,
-  isDragging: false
-};
+let topText = { text: "TOP TEXT", x: 0, y: 0 };
+let bottomText = { text: "BOTTOM TEXT", x: 0, y: 0 };
 
 // ----------------------
 // Load meme templates
@@ -45,13 +37,11 @@ fetch("https://api.imgflip.com/get_memes")
   .then(data => {
     memeTemplates = data.data.memes;
     memeTemplates.forEach(meme => {
-      // Dropdown
       const option = document.createElement("option");
       option.value = meme.url;
       option.textContent = meme.name;
       templateSelect.appendChild(option);
 
-      // Thumbnails
       const thumb = document.createElement("img");
       thumb.src = meme.url;
       thumb.title = meme.name;
@@ -63,7 +53,9 @@ fetch("https://api.imgflip.com/get_memes")
 // ----------------------
 // Theme toggle
 // ----------------------
-toggleTheme.addEventListener("click", () => document.body.classList.toggle("dark"));
+toggleTheme.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
 
 // ----------------------
 // Load image
@@ -105,75 +97,101 @@ function drawMeme() {
   ctx.lineWidth = 2;
   ctx.textAlign = "center";
 
-  // Top
+  // Top text
   ctx.fillText(topText.text, topText.x, topText.y);
   ctx.strokeText(topText.text, topText.x, topText.y);
 
-  // Bottom
+  // Bottom text
   ctx.fillText(bottomText.text, bottomText.x, bottomText.y);
   ctx.strokeText(bottomText.text, bottomText.x, bottomText.y);
 }
 
 // ----------------------
-// Update text from inputs
+// Input listeners
 // ----------------------
 inputTop.addEventListener("input", () => {
   topText.text = inputTop.value || "TOP TEXT";
   drawMeme();
 });
+
 inputBottom.addEventListener("input", () => {
   bottomText.text = inputBottom.value || "BOTTOM TEXT";
   drawMeme();
 });
+
 fontSizeInput.addEventListener("input", drawMeme);
 fontColorInput.addEventListener("input", drawMeme);
 fontStyleInput.addEventListener("input", drawMeme);
 
 // ----------------------
-// Dragging function (desktop + mobile)
+// FIXED DRAG SYSTEM
 // ----------------------
-function enableDrag(textObj) {
-  let offsetX = 0;
-  let offsetY = 0;
 
-  function startDrag(e) {
-    e.preventDefault();
-    textObj.isDragging = true;
+let activeText = null;
+let offsetX = 0;
+let offsetY = 0;
 
-    const clientX = e.type.startsWith("touch") ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type.startsWith("touch") ? e.touches[0].clientY : e.clientY;
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.type.startsWith("touch") ? e.touches[0].clientX : e.clientX;
+  const clientY = e.type.startsWith("touch") ? e.touches[0].clientY : e.clientY;
 
-    offsetX = clientX - textObj.x;
-    offsetY = clientY - textObj.y;
-  }
-
-  function drag(e) {
-    if (!textObj.isDragging) return;
-
-    const clientX = e.type.startsWith("touch") ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type.startsWith("touch") ? e.touches[0].clientY : e.clientY;
-
-    textObj.x = clientX - offsetX;
-    textObj.y = clientY - offsetY;
-    drawMeme();
-  }
-
-  function endDrag() {
-    textObj.isDragging = false;
-  }
-
-  canvas.addEventListener("mousedown", startDrag);
-  canvas.addEventListener("mousemove", drag);
-  canvas.addEventListener("mouseup", endDrag);
-
-  canvas.addEventListener("touchstart", startDrag);
-  canvas.addEventListener("touchmove", drag);
-  canvas.addEventListener("touchend", endDrag);
+  return {
+    x: (clientX - rect.left) * (canvas.width / rect.width),
+    y: (clientY - rect.top) * (canvas.height / rect.height)
+  };
 }
 
-// Enable dragging for both texts
-enableDrag(topText);
-enableDrag(bottomText);
+function isTextHit(textObj, x, y) {
+  const fontSize = parseInt(fontSizeInput.value);
+  const textWidth = ctx.measureText(textObj.text).width;
+
+  return (
+    x > textObj.x - textWidth / 2 &&
+    x < textObj.x + textWidth / 2 &&
+    y > textObj.y - fontSize &&
+    y < textObj.y + 10
+  );
+}
+
+function startDrag(e) {
+  e.preventDefault();
+  const pos = getCanvasPos(e);
+
+  if (isTextHit(topText, pos.x, pos.y)) {
+    activeText = topText;
+  } else if (isTextHit(bottomText, pos.x, pos.y)) {
+    activeText = bottomText;
+  } else {
+    activeText = null;
+    return;
+  }
+
+  offsetX = pos.x - activeText.x;
+  offsetY = pos.y - activeText.y;
+}
+
+function drag(e) {
+  if (!activeText) return;
+
+  const pos = getCanvasPos(e);
+  activeText.x = pos.x - offsetX;
+  activeText.y = pos.y - offsetY;
+
+  drawMeme();
+}
+
+function endDrag() {
+  activeText = null;
+}
+
+canvas.addEventListener("mousedown", startDrag);
+canvas.addEventListener("mousemove", drag);
+canvas.addEventListener("mouseup", endDrag);
+
+canvas.addEventListener("touchstart", startDrag);
+canvas.addEventListener("touchmove", drag);
+canvas.addEventListener("touchend", endDrag);
 
 // ----------------------
 // Download meme
@@ -191,17 +209,21 @@ downloadBtn.addEventListener("click", () => {
 // Buttons
 // ----------------------
 generateBtn.addEventListener("click", drawMeme);
+
 templateSelect.addEventListener("change", () => {
   if (templateSelect.value) loadImage(templateSelect.value);
 });
+
 randomBtn.addEventListener("click", () => {
   const randomMeme = memeTemplates[Math.floor(Math.random() * memeTemplates.length)];
   templateSelect.value = randomMeme.url;
   loadImage(randomMeme.url);
 });
+
 imageUpload.addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
   reader.onload = event => loadImage(event.target.result);
   reader.readAsDataURL(file);
