@@ -50,6 +50,20 @@ fetch("https://api.imgflip.com/get_memes")
     });
   });
 
+const seeMoreBtn = document.getElementById("see-more-btn");
+let expanded = false;
+
+seeMoreBtn.addEventListener("click", () => {
+  expanded = !expanded;
+
+  if (expanded) {
+    templatePreview.classList.add("expanded");
+    seeMoreBtn.textContent = "Show Less";
+  } else {
+    templatePreview.classList.remove("expanded");
+    seeMoreBtn.textContent = "See More";
+  }
+});
 // ----------------------
 // Theme toggle
 // ----------------------
