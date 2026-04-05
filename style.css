@@ -35,16 +35,28 @@ button:hover { background: #357ABD; }
 
 /* Template preview thumbnails */
 #template-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  max-height: 140px; /* shows ~2 rows */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  gap: 10px;
+
+  max-height: 150px;   /* THIS controls 2 rows */
   overflow: hidden;
+
   transition: max-height 0.3s ease;
 }
 
+/* Expanded state */
 #template-preview.expanded {
-  max-height: 1000px; /* expands fully */
+  max-height: 1000px;
+}
+
+/* Images */
+#template-preview img {
+  width: 100%;
+  height: 70px;   /* IMPORTANT: fixed height */
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 #see-more-btn {
