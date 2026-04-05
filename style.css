@@ -3,62 +3,135 @@
 body { margin: 0; background: #f2f3f7; color: #333; transition: background 0.3s, color 0.3s; }
 
 /* Header */
-header { display: flex; justify-content: space-between; align-items: center;
-         background: linear-gradient(90deg, #4a90e2, #357ABD); color: #fff; padding: 1rem 2rem;
-         box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-header button { background: rgba(255,255,255,0.2); border: none; padding: 0.5rem 1rem;
-                border-radius: 20px; cursor: pointer; transition: 0.3s; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #4a90e2, #357ABD);
+  color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+header button {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
 header button:hover { background: rgba(255,255,255,0.4); }
 
 /* Main Layout */
-main { display: flex; flex-wrap: wrap; gap: 2rem; padding: 2rem; justify-content: center; }
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  justify-content: center;
+}
 
 /* Cards */
-.card { background: #fff; border-radius: 15px; padding: 1.5rem;
-       box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
+.card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
 
 /* Preview Section */
-.preview-section { flex: 1 1 500px; text-align: center; }
-#meme-container { position: relative; max-width: 500px; margin: auto; }
-canvas { width: 100%; border-radius: 10px; border: 2px solid #ccc; }
+.preview-section {
+  flex: 1 1 500px;
+  text-align: center;
+}
 
+#meme-container {
+  position: relative;
+  max-width: 500px;
+  margin: auto;
+}
+
+canvas {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+}
 
 /* Controls Section */
-.controls-section { flex: 1 1 350px; display: flex; flex-direction: column; gap: 1rem; }
-.controls-section label { display: flex; flex-direction: column; }
-.font-controls { display: flex; gap: 1rem; flex-wrap: wrap; }
-.buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-button { background: #4a90e2; color: white; border: none; padding: 0.7rem 1.2rem;
-         border-radius: 10px; cursor: pointer; transition: 0.3s; }
+.controls-section {
+  flex: 1 1 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls-section label {
+  display: flex;
+  flex-direction: column;
+}
+
+.font-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
 button:hover { background: #357ABD; }
 
-/* Template preview thumbnails */
+/* ========================= */
+/* FIXED TEMPLATE GRID */
+/* ========================= */
+
 #template-preview {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 
-  max-height: 150px;   /* THIS controls 2 rows */
+  max-height: 160px; /* EXACT for 2 rows */
   overflow: hidden;
 
   transition: max-height 0.3s ease;
 }
 
-/* Expanded state */
+/* Expanded */
 #template-preview.expanded {
-  max-height: 1000px;
+  max-height: 2000px;
 }
 
 /* Images */
 #template-preview img {
   width: 100%;
-  height: 70px;   /* IMPORTANT: fixed height */
+  height: 70px;
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
 }
 
+/* Button */
 #see-more-btn {
   margin-top: 10px;
   padding: 6px 12px;
@@ -68,8 +141,14 @@ button:hover { background: #357ABD; }
   border-radius: 8px;
   cursor: pointer;
 }
+
 /* Footer */
-footer { text-align: center; padding: 1rem; background: #ddd; margin-top: 2rem; }
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #ddd;
+  margin-top: 2rem;
+}
 
 /* Dark mode */
 body.dark { background: #222; color: #fff; }
